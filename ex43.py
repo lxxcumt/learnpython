@@ -11,11 +11,12 @@ class Engine(object):
 	def __init__(self, scene_map):
 		self.scene_map = scene_map
 	def play(self):
-		current_scene = self.scene_map.opening_scene() #?????
+		current_scene = self.scene_map.opening_scene()
 		
 		while True:
 			print "\n--------"
-			next_scene_name = current_scene.enter() #?????
+			next_scene_name = current_scene.enter()
+			current_scene = self.scene_map.next_scene(next_scene_name)
 			
 class Death(Scene):
 	
@@ -65,8 +66,8 @@ class CentralCorridor(Scene):
 		elif action == "tell a joke":
 			print "Lucky for you they made you learn Gothon insults in the academy."
 			print "You tell the one Gothon joke you know:"
-			print ""
-			print ""
+			print "fgsdgfsdfgsdgdsgfdgjghktfsgb"
+			print "bcvnmghjdtrwarrthtyiuyiykjlo"
 			print "While he is laughing you run up and shoot him square in the head"
 			print "putting him down, they jump through the Weapons Armotry door."
 			return 'laser_weapon_armory'
@@ -75,12 +76,61 @@ class CentralCorridor(Scene):
 			print "DOES NOT COMPUTE!"
 			return 'central_corridor'
 		
+class LaserWeaponArmory(Scene):
+	
+	def enter(self):
+		print "You do a dive roll into the Weapon Armotry, Crouch and scan the room"
+		print "for more Gothons that might be hiding. It's dead quiet, too quiet."
+		print "You stand up and run to far side of the romm and find the"
+		print "neutron bomb in its container. There is a keypad lock on the box "
+		print "and you need the code to get the bomb out. If you get the code"
+		print "wrong 10 times then the lock closes forever and you can not"
+		print "get the bomb. The code is 3 digits."
+		code = "%d%d%d" %(randint(1,9),randint(1,9),randint(1,9))
+		guess = raw_input("[Keypad]> ")
+		guesses = 0
+		
+		while guess != code and guesses<10:
+			print "BZZZZEDDD"
+			guesses += 1
+			guess = raw_input("[Keypad]> ")
+			
+		if guess == code:
+			print "The container clicks open and seal breaks, letting gas out."
+			print "You grab the neutron bomb and run as fase as you can to the"
+			print "bridge where you must place it in the right spot."
+			return 'the_bridge'
+		else:
+			print "The lock buzzes one last time and then you hear a sickening"
+			print "melting sound as the mechanism is fused together."
+			print "You decide to sit there, finally the Gothons blow up the"
+			print "ship from their ship and you die"
+			return 'death'
+			
+class TheBridge(Scene):
+
+	def enter(self):
+		print "You burst onto the Bridge with the netron destruct bomb"
+		
+		
+		action = raw_input("> ")
+		
+
+class EscapePod(Scene):
+	
+	def enter(self):
+		print ""		
 		
 		
 class Map(object):
 	
-	scenes = {'central_corridor':CentralCorridor()}
-	
+	scenes = {
+		'central_corridor':CentralCorridor(), 
+		'laser_weapon_armory':LaserWeaponArmory(),
+		'the_bridge':TheBridge(),	
+		'escape_pod':EscapePod(),
+		'death':Death()
+	}
 	
 	def __init__(self, start_scene):
 		self.start_scene = start_scene
